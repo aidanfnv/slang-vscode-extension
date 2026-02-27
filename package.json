@@ -138,7 +138,7 @@
                     "items": {"type": "string"},
                     "examples": [["include/", "c:\\external-lib\\include"]],
                     "default": [],
-                    "description": "The language server will search for the included or imported file in these additional directories first. If not found, the server will look in all sub directories in the current workspace (if enabled by the setting)."
+                    "description": "The language server will search for the included or imported file in these additional directories first. If not found, the server will look in all sub directories in the current workspace (if enabled by the setting). Supports VS Code variables such as ${workspaceFolder}."
                 },
                 "slang.enableCommitCharactersInAutoCompletion": {
                     "scope": "window",

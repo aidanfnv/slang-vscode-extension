@@ -47,6 +47,7 @@ You can specifiy the set of predefined preprocessor macros that the language ser
 ### Additional Search Path
 
 By default, the extension will search for all sub directories in the current workspace for an included or imported file. You can specify additional search paths via the `slang.additionalSearchPaths` setting, which will be looked at first. You can also disable the search in workspace directories and make the extension to search only in configured search paths (via `slang.searchInAllWorkspaceDirectories`). The path of the currently opend file will always be used.
+This setting supports VS Code variables such as `${workspaceFolder}`.
 
 ### Commit characters for auto completion
 

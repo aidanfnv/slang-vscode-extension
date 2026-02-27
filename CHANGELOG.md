@@ -1,5 +1,8 @@
 # Change Log
 
+# Unreleased
+- Expand VS Code variables (for example `${workspaceFolder}`) in `slang.additionalSearchPaths`.
+
 # v2.0.7
 - Update to Slang v2026.3.1.
 - Fixes crash on incomplete import statements
