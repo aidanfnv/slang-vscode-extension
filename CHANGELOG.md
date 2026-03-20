@@ -1,6 +1,8 @@
 # Change Log
 
-# Unreleased
+# v2.0.8
+- Update to Slang v2026.5.
+- Adds support for generic value variadics, and recursion structures on variadic packs.
 - Expand VS Code variables (for example `${workspaceFolder}`) in `slang.additionalSearchPaths`.
 
 # v2.0.7
