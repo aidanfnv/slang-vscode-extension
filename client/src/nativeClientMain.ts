@@ -14,6 +14,7 @@ import { CompiledPlayground, CompileRequest, EntrypointsRequest, EntrypointsResu
 import { getSlangdLocation } from './native/slangd';
 import { SlangSynthesizedCodeProvider } from './native/synth_doc_provider';
 import { getSlangFilesWithContents, sharedActivate } from './sharedClient';
+import { expandSlangSettingsInConfiguration } from './configVariables';
 
 let client: LanguageClient;
 let worker: Worker;
@@ -68,6 +69,23 @@ export async function activate(context: ExtensionContext) {
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
 		documentSelector: [{ scheme: 'file', language: 'slang' }],
+		middleware: {
+			workspace: {
+				configuration: async (params, token, next) => {
+					const values = await next(params, token);
+					if (!Array.isArray(values)) {
+						return values;
+					}
+					return values.map((value, index) =>
+						expandSlangSettingsInConfiguration(
+							value,
+							params.items[index]?.section,
+							params.items[index]?.scopeUri,
+						)
+					);
+				},
+			},
+		},
 	};
 
 	// Create the language client and start the client.

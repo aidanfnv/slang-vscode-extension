@@ -5,6 +5,7 @@ import { LanguageClientOptions } from 'vscode-languageclient';
 import { LanguageClient } from 'vscode-languageclient/browser';
 import type { CompiledPlayground, CompileRequest, EntrypointsRequest, EntrypointsResult, Result, ServerInitializationOptions, Shader } from 'slang-playground-shared';
 import { getSlangFilesWithContents, sharedActivate } from './sharedClient';
+import { expandSlangSettingsInConfiguration } from './configVariables';
 
 let client: LanguageClient;
 
@@ -23,6 +24,23 @@ export async function activate(context: ExtensionContext) {
 		documentSelector,
 		synchronize: {},
 		initializationOptions,
+		middleware: {
+			workspace: {
+				configuration: async (params, token, next) => {
+					const values = await next(params, token);
+					if (!Array.isArray(values)) {
+						return values;
+					}
+					return values.map((value, index) =>
+						expandSlangSettingsInConfiguration(
+							value,
+							params.items[index]?.section,
+							params.items[index]?.scopeUri,
+						)
+					);
+				},
+			},
+		},
 	};
 
 	client = createWorkerLanguageClient(context, clientOptions);
