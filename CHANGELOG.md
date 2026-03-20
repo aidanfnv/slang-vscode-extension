@@ -1,5 +1,9 @@
 # Change Log
 
+# v2.0.8
+- Update to Slang v2026.5.
+- Adds support for generic value variadics, and recursion structures on variadic packs.
+
 # v2.0.7
 - Update to Slang v2026.3.1.
 - Fixes crash on incomplete import statements
