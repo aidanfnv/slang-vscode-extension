@@ -30,6 +30,9 @@
       "include": "#enum-definitions"
     },
     {
+      "include": "#buffer-definitions"
+    },
+    {
       "include": "#type-declaration-headers"
     },
     {
@@ -260,7 +263,7 @@
       "patterns": [
         {
           "name": "meta.declaration.associatedtype.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((associatedtype))\\b\\s+([A-Za-z_][A-Za-z_0-9]*)",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((associatedtype))\\b\\s+([A-Za-z_][A-Za-z_0-9]*)",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
@@ -306,6 +309,92 @@
             },
             {
               "include": "#where-clauses"
+            }
+          ]
+        }
+      ]
+    },
+    "buffer-definitions": {
+      "patterns": [
+        {
+          "name": "meta.declaration.buffer.slang",
+          "begin": "(?x)\\b(buffer)\\b\\s+([A-Za-z_][A-Za-z_0-9]*)\\b(?=[^;]*\\{)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.type.slang"
+            },
+            "2": {
+              "name": "entity.name.type.slang"
+            }
+          },
+          "end": "(?=\\s*;)",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "name": "meta.buffer.body.slang",
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.section.group.slang"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.section.group.slang"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#attributes"
+                },
+                {
+                  "include": "#strings"
+                },
+                {
+                  "include": "#numbers"
+                },
+                {
+                  "include": "#compile-time"
+                },
+                {
+                  "include": "#traditional-declarations"
+                },
+                {
+                  "include": "#modern-type-annotations"
+                },
+                {
+                  "include": "#semantics"
+                },
+                {
+                  "include": "#types"
+                },
+                {
+                  "include": "#keywords"
+                },
+                {
+                  "include": "#constants"
+                },
+                {
+                  "include": "#function-calls"
+                },
+                {
+                  "include": "#operators"
+                }
+              ]
+            },
+            {
+              "match": "\\b([A-Za-z_][A-Za-z_0-9]*)\\b(?=\\s*;)",
+              "captures": {
+                "1": {
+                  "name": "variable.other.slang"
+                }
+              }
             }
           ]
         }
@@ -773,7 +862,7 @@
           ]
         },
         {
-          "match": "(?x)\\b((?!if\\b|else\\b|switch\\b|case\\b|default\\b|return\\b|try\\b|throw\\b|throws\\b|catch\\b|while\\b|for\\b|do\\b|break\\b|continue\\b|discard\\b|defer\\b|let\\b|var\\b|func\\b|typedef\\b|typealias\\b|property\\b|get\\b|set\\b|class\\b|struct\\b|interface\\b|enum\\b|extension\\b|associatedtype\\b|namespace\\b|using\\b|import\\b|module\\b|implementing\\b|cbuffer\\b|tbuffer\\b|where\\b|syntax\\b|attribute_syntax\\b|semantic\\b|type_param\\b|__generic\\b|__extension\\b|__init\\b|__subscript\\b|__import\\b|__include\\b|__ignored_block\\b|__transparent_block\\b|__file_decl\\b|__require_capability\\b|__generic_value_param\\b|typename\\b|static\\b|const\\b|extern\\b|inline\\b|public\\b|private\\b|internal\\b|protected\\b|uniform\\b|dynamic_uniform\\b|groupshared\\b|shared\\b|volatile\\b|coherent\\b|restrict\\b|readonly\\b|writeonly\\b|export\\b|override\\b|param\\b|require\\b|row_major\\b|column_major\\b|nointerpolation\\b|noperspective\\b|linear\\b|sample\\b|centroid\\b|precise\\b|in\\b|out\\b|inout\\b|ref\\b|__ref\\b|__constref\\b|dyn\\b|some\\b|implicit\\b|noncopyable\\b|constexpr\\b|mutating\\b|highp\\b|lowp\\b|mediump\\b|__builtin\\b|__global\\b|point\\b|line\\b|triangle\\b|lineadj\\b|triangleadj\\b|vertices\\b|indices\\b|primitives\\b|payload\\b|__prefix\\b|__postfix\\b|__exported\\b|layout\\b|hitAttributeEXT\\b|__intrinsic_op\\b|__target_intrinsic\\b|__specialized_for_target\\b|__glsl_extension\\b|__glsl_version\\b|__spirv_version\\b|__wgsl_extension\\b|__cuda_sm_version\\b|__builtin_type\\b|__builtin_requirement\\b|__magic_type\\b|__magic_enum\\b|__intrinsic_type\\b|__implicit_conversion\\b|__attributeTarget\\b|as\\b|is\\b|this\\b|This\\b|sizeof\\b|alignof\\b|countof\\b|no_diff\\b|fwd_diff\\b|bwd_diff\\b|__fwd_diff\\b|__bwd_diff\\b|__dispatch_kernel\\b|each\\b|expand\\b|optional\\b|nonempty\\b|spirv_asm\\b|__return_val\\b|__first\\b|__last\\b|__trimFirst\\b|__trimLast\\b|__packBranch\\b|__getAddress\\b|__floatAsInt\\b|true\\b|false\\b|nullptr\\b|none\\b|Range\\b)[A-Za-z_][A-Za-z_0-9]*)\\b(?=\\s*(?:<[^<>{}\\[\\];=()\\n&|!?+\\-/%]*(?<=[^\\s])>\\s*)?\\()",
+          "match": "(?x)\\b((?!if\\b|else\\b|switch\\b|case\\b|default\\b|return\\b|try\\b|throw\\b|throws\\b|catch\\b|while\\b|for\\b|do\\b|break\\b|continue\\b|discard\\b|defer\\b|let\\b|var\\b|func\\b|typedef\\b|typealias\\b|property\\b|get\\b|set\\b|class\\b|struct\\b|interface\\b|enum\\b|extension\\b|associatedtype\\b|namespace\\b|using\\b|import\\b|module\\b|implementing\\b|cbuffer\\b|tbuffer\\b|where\\b|syntax\\b|attribute_syntax\\b|semantic\\b|type_param\\b|__generic\\b|__extension\\b|__init\\b|__subscript\\b|__import\\b|__include\\b|__ignored_block\\b|__transparent_block\\b|__file_decl\\b|__require_capability\\b|__generic_value_param\\b|typename\\b|static\\b|const\\b|extern\\b|inline\\b|public\\b|private\\b|internal\\b|protected\\b|uniform\\b|dynamic_uniform\\b|groupshared\\b|shared\\b|volatile\\b|coherent\\b|restrict\\b|readonly\\b|writeonly\\b|export\\b|override\\b|__extern_cpp\\b|param\\b|require\\b|row_major\\b|column_major\\b|nointerpolation\\b|noperspective\\b|linear\\b|sample\\b|centroid\\b|precise\\b|in\\b|out\\b|inout\\b|ref\\b|__ref\\b|__constref\\b|dyn\\b|some\\b|implicit\\b|noncopyable\\b|constexpr\\b|mutating\\b|highp\\b|lowp\\b|mediump\\b|__builtin\\b|__global\\b|point\\b|line\\b|triangle\\b|lineadj\\b|triangleadj\\b|vertices\\b|indices\\b|primitives\\b|payload\\b|__prefix\\b|__postfix\\b|__exported\\b|layout\\b|hitAttributeEXT\\b|__intrinsic_op\\b|__target_intrinsic\\b|__specialized_for_target\\b|__glsl_extension\\b|__glsl_version\\b|__spirv_version\\b|__wgsl_extension\\b|__cuda_sm_version\\b|__builtin_type\\b|__builtin_requirement\\b|__magic_type\\b|__magic_enum\\b|__intrinsic_type\\b|__implicit_conversion\\b|__attributeTarget\\b|as\\b|is\\b|this\\b|This\\b|sizeof\\b|alignof\\b|countof\\b|no_diff\\b|fwd_diff\\b|bwd_diff\\b|__fwd_diff\\b|__bwd_diff\\b|__dispatch_kernel\\b|each\\b|expand\\b|optional\\b|nonempty\\b|spirv_asm\\b|__return_val\\b|__first\\b|__last\\b|__trimFirst\\b|__trimLast\\b|__packBranch\\b|__getAddress\\b|__floatAsInt\\b|true\\b|false\\b|nullptr\\b|none\\b|Range\\b)[A-Za-z_][A-Za-z_0-9]*)\\b(?=\\s*(?:<[^<>{}\\[\\];=()\\n&|!?+\\-/%]*(?<=[^\\s])>\\s*)?\\()",
           "captures": {
             "1": {
               "name": "entity.name.function.slang"
@@ -1216,7 +1305,7 @@
           "name": "keyword.declaration.slang"
         },
         {
-          "match": "(?<!\\.)(?<!::)(?<!->)\\b(?:static|const|extern|inline|public|private|internal|protected|uniform|dynamic_uniform|groupshared|shared|volatile|coherent|restrict|readonly|writeonly|export|override|param|require|row_major|column_major|nointerpolation|noperspective|linear|sample|centroid|precise|in|out|inout|ref|__ref|__constref|dyn|some|implicit|noncopyable|constexpr|mutating|highp|lowp|mediump|__builtin|__global|point|line|triangle|lineadj|triangleadj|vertices|indices|primitives|payload|__prefix|__postfix|__exported|layout|hitAttributeEXT|__intrinsic_op|__target_intrinsic|__specialized_for_target|__glsl_extension|__glsl_version|__spirv_version|__wgsl_extension|__cuda_sm_version|__builtin_type|__builtin_requirement|__magic_type|__magic_enum|__intrinsic_type|__implicit_conversion|__attributeTarget)\\b",
+          "match": "(?<!\\.)(?<!::)(?<!->)\\b(?:static|const|extern|inline|public|private|internal|protected|uniform|dynamic_uniform|groupshared|shared|volatile|coherent|restrict|readonly|writeonly|export|override|__extern_cpp|param|require|row_major|column_major|nointerpolation|noperspective|linear|sample|centroid|precise|in|out|inout|ref|__ref|__constref|dyn|some|implicit|noncopyable|constexpr|mutating|highp|lowp|mediump|__builtin|__global|point|line|triangle|lineadj|triangleadj|vertices|indices|primitives|payload|__prefix|__postfix|__exported|layout|hitAttributeEXT|__intrinsic_op|__target_intrinsic|__specialized_for_target|__glsl_extension|__glsl_version|__spirv_version|__wgsl_extension|__cuda_sm_version|__builtin_type|__builtin_requirement|__magic_type|__magic_enum|__intrinsic_type|__implicit_conversion|__attributeTarget)\\b",
           "name": "storage.modifier.slang"
         },
         {
@@ -1484,6 +1573,38 @@
           ]
         },
         {
+          "name": "meta.preprocessor.language-version.slang",
+          "begin": "^(\\s*)(#)\\s*(language|lang|version)\\b",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.control.directive.slang"
+            },
+            "3": {
+              "name": "keyword.control.directive.slang"
+            }
+          },
+          "end": "(?<!\\\\)$",
+          "patterns": [
+            {
+              "include": "#line-continuation"
+            },
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "match": "\\b(?:slang|latest|core|es|compatibility)\\b",
+              "name": "keyword.control.directive.slang"
+            },
+            {
+              "match": "\\b[A-Za-z_][A-Za-z_0-9]*\\b",
+              "name": "entity.name.other.preprocessor.macro.slang"
+            }
+          ]
+        },
+        {
           "name": "meta.preprocessor.slang",
           "begin": "^(\\s*)(#)\\s*(if|ifdef|ifndef|elif|else|endif|undef|pragma|line|error|warning)\\b",
           "beginCaptures": {
@@ -1739,7 +1860,7 @@
         },
         {
           "name": "meta.declaration.traditional.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((expand)\\b\\s+)(each)\\b\\s+([A-Za-z_][A-Za-z_0-9]*)\\b(?=\\s*(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((expand)\\b\\s+)(each)\\b\\s+([A-Za-z_][A-Za-z_0-9]*)\\b(?=\\s*(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
@@ -1793,7 +1914,7 @@
         },
         {
           "name": "meta.declaration.traditional.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((expand)\\b\\s+)?((?:bool|int(?:8_t|16_t|32_t|64_t)?|uint(?:8_t|16_t|32_t|64_t)?|half|float(?:16_t|32_t|64_t)?|double)[1-4](?:x[1-4])?)\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((expand)\\b\\s+)?((?:bool|int(?:8_t|16_t|32_t|64_t)?|uint(?:8_t|16_t|32_t|64_t)?|half|float(?:16_t|32_t|64_t)?|double)[1-4](?:x[1-4])?)\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
@@ -1844,7 +1965,7 @@
         },
         {
           "name": "meta.declaration.traditional.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((expand)\\b\\s+)?((?:void|bool|int8_t|int16_t|int32_t|int64_t|int|uint8_t|uint16_t|uint32_t|uint64_t|uint|half|float16_t|float32_t|float64_t|float|double|string|vector|matrix|functype))\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((expand)\\b\\s+)?((?:void|bool|int8_t|int16_t|int32_t|int64_t|int|uint8_t|uint16_t|uint32_t|uint64_t|uint|half|float16_t|float32_t|float64_t|float|double|string|vector|matrix|functype))\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
@@ -1895,7 +2016,7 @@
         },
         {
           "name": "meta.declaration.traditional.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((expand)\\b\\s+)?((?:String|Array|Tuple|Optional|Conditional|Result|Ptr|ImmutablePtr|Atomic|DescriptorHandle|DifferentialPair|ParameterBlock|ConstantBuffer|TextureBuffer|SamplerState|SamplerComparisonState|SubpassInput|SubpassInputMS|RaytracingAccelerationStructure))\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((expand)\\b\\s+)?((?:String|Array|Tuple|Optional|Conditional|Result|Ptr|ImmutablePtr|Atomic|DescriptorHandle|DifferentialPair|ParameterBlock|ConstantBuffer|TextureBuffer|SamplerState|SamplerComparisonState|SubpassInput|SubpassInputMS|RaytracingAccelerationStructure))\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
@@ -1946,7 +2067,7 @@
         },
         {
           "name": "meta.declaration.traditional.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((expand)\\b\\s+)?((?:(?:Depth|Feedback|RasterizerOrdered|RW)?Texture(?:1D|2D|3D|Cube)(?:Array)?(?:MS(?:Array)?)?|Sampler(?:1D|2D|3D|Cube)(?:Array)?(?:Shadow)?|(?:Append|Consume|RW)?StructuredBuffer|(?:RW)?Buffer|(?:RW|RasterizerOrdered)?ByteAddressBuffer))\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((expand)\\b\\s+)?((?:(?:Depth|Feedback|RasterizerOrdered|RW)?Texture(?:1D|2D|3D|Cube)(?:Array)?(?:MS(?:Array)?)?|Sampler(?:1D|2D|3D|Cube)(?:Array)?(?:Shadow)?|(?:Append|Consume|RW)?StructuredBuffer|(?:RW)?Buffer|(?:RW|RasterizerOrdered)?ByteAddressBuffer))\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
@@ -1997,7 +2118,7 @@
         },
         {
           "name": "meta.declaration.traditional.slang",
-          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override)\\b\\s+)*)((expand)\\b\\s+)?((?!if\\b|else\\b|switch\\b|case\\b|default\\b|return\\b|for\\b|while\\b|do\\b|break\\b|continue\\b|discard\\b|defer\\b|let\\b|var\\b|func\\b|struct\\b|class\\b|interface\\b|enum\\b|extension\\b|associatedtype\\b|namespace\\b|using\\b|import\\b|module\\b|implementing\\b|typealias\\b|typedef\\b|cbuffer\\b|tbuffer\\b|expand\\b|each\\b|optional\\b|nonempty\\b|spirv_asm\\b|__return_val\\b|__first\\b|__last\\b|__trimFirst\\b|__trimLast\\b|__packBranch\\b|__getAddress\\b|__floatAsInt\\b)(?:functype\\s*\\([^)]*\\)\\s*->\\s*)?[A-Za-z_][A-Za-z_0-9]*(?:(?:\\s*(?:::|\\.))\\s*[A-Za-z_][A-Za-z_0-9]*)*)\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
+          "begin": "(?x)\\b((?:(?:static|const|extern|inline|nointerpolation|noperspective|linear|sample|centroid|precise|shared|groupshared|uniform|volatile|coherent|restrict|readonly|writeonly|export|dynamic_uniform|public|private|internal|protected|param|require|in|out|inout|ref|__ref|__constref|dyn|override|__extern_cpp)\\b\\s+)*)((expand)\\b\\s+)?((?!if\\b|else\\b|switch\\b|case\\b|default\\b|return\\b|for\\b|while\\b|do\\b|break\\b|continue\\b|discard\\b|defer\\b|let\\b|var\\b|func\\b|struct\\b|class\\b|interface\\b|enum\\b|extension\\b|associatedtype\\b|namespace\\b|using\\b|import\\b|module\\b|implementing\\b|typealias\\b|typedef\\b|cbuffer\\b|tbuffer\\b|expand\\b|each\\b|optional\\b|nonempty\\b|spirv_asm\\b|__return_val\\b|__first\\b|__last\\b|__trimFirst\\b|__trimLast\\b|__packBranch\\b|__getAddress\\b|__floatAsInt\\b)(?:functype\\s*\\([^)]*\\)\\s*->\\s*)?[A-Za-z_][A-Za-z_0-9]*(?:(?:\\s*(?:::|\\.))\\s*[A-Za-z_][A-Za-z_0-9]*)*)\\b(?=\\s*(?:<[^;\\n]*>\\s*)?(?:\\s*(?:\\[[^\\]\\n]*\\]|\\*))*\\s*[A-Za-z_][A-Za-z_0-9]*\\b(?:\\s*<[^{};\\n]*>\\s*)?\\s*(?:\\(|=|;|,|\\)|\\[|:))",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.slang"
